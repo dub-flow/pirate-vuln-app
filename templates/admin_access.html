@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Access</title>
+</head>
+<body>
+<h2>Admin Access</h2>
+
+<form id="admin-form">
+    Session ID: <input type="text" id="session-id">
+    <button type="submit">Access</button>
+</form>
+
+<p id="admin-message"></p>
+
+<script>
+document.getElementById('admin-form').onsubmit = async function(event) {
+    event.preventDefault();
+    const sessionId = document.getElementById('session-id').value;
+    
+    const response = await fetch(`/admin?sessionId=${sessionId}`);
+    const message = await response.text();
+    document.getElementById('admin-message').innerText = message;
+};
+</script>
+</body>
+</html>

@@ -13,6 +13,30 @@ files_dir = './pirates'
 def index():
     return render_template('index.html')
 
+@app.route('/xslt')
+def xslt_template():
+    return render_template('xslt.html')
+
+@app.route('/admin-command')
+def admin_command_template():
+    return render_template('admin_command.html')
+
+@app.route('/loot-form')
+def loot_form_template():
+    return render_template('loot_form.html')
+
+@app.route('/password-reset-form')
+def password_reset_form_template():
+    return render_template('password_reset_form.html')
+
+@app.route('/admin-access')
+def admin_access_template():
+    return render_template('admin_access.html')
+
+@app.route('/change-password')
+def change_password_template():
+    return render_template('change_password.html')
+
 @app.route('/pirates', defaults={'filename': ''})
 @app.route('/pirates/<path:filename>')
 def serve_files(filename):
@@ -64,7 +88,6 @@ def loot():
     else:
         return "No loot here, try 123456789"
 
-
 @app.route('/admin')
 def admin():
     # Check if sessionId is provided in the query parameters
@@ -72,7 +95,7 @@ def admin():
     if session_id == '12345':
         return 'Arrrr welcome aboard, Cap'
     else:
-        return 'Provide \'?sessionId\' or ye be walkin\' the plank! Access be denied! Arrrr!'
+        return 'Ye be walkin\' the plank! Access be denied! Arrrr!'
 
 @app.route('/admin-cmd', methods=['POST'])
 def admin_cmd():

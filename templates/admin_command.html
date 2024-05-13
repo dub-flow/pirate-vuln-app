@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Command Execution</title>
+</head>
+<body>
+    <h2>Execute Command as Admin</h2>
+    <form id="admin-command-form">
+        Enter command: <input type="text" id="admin-cmd-input">
+        Session ID: <input type="text" id="admin-cmd-sessionId">
+        <button type="submit">Execute</button>
+    </form>
+    <p id="admin-cmd-output"></p>
+
+    <script>
+        document.getElementById('admin-command-form').onsubmit = async function(event) {
+            event.preventDefault();
+            const command = document.getElementById('admin-cmd-input').value;
+            const sessionId = document.getElementById('admin-cmd-sessionId').value;
+            console.log("Session ID:", sessionId); // Print the session ID value
+            const response = await fetch(`/admin-cmd?sessionId=${sessionId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ command: command })
+            });
+            const data = await response.text();
+            document.getElementById('admin-cmd-output').innerText = data;
+        };
+    </script>
+</body>
+</html>

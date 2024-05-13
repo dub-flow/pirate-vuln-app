@@ -28,12 +28,17 @@ Content-Length: 25
 {"email":"test@test.com"}
 ```
 
-# Vulnerability 3: IDOR
+# Vulnerability 3: IDOR in the Loot Function
 
 * Check out the 'Loot' functionality and realize that you can access, without authentication, any loot if you know the `id`
 * Check out the `production.log` again and find the `id` of the `admin` user
 
-# Vulnerability 4: Admins can Exeucte OS Commands
+# Vulnerability 4: Admins can Execute OS Commands
 
 * This is of course only like god-level bad if we can take over an admin account... So that's what we're gonna do here
 * First, we find the admin's `sessionId` in the `production.log` and then run commands
+
+# Vulnerability 5: XSLT Injection
+
+* Use the `Transform XML with XSLT` functionality
+* Upload a file and take the `./resources/injection-read-file.xslt`, and observe that the `/etc/passwd` file was returned

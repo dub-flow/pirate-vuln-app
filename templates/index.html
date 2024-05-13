@@ -9,132 +9,14 @@
 <h1>Welcome to the Pirate Ship</h1>
 <p>"A smooth sea never made a skilled pirate" - Some (probably skilled) Pirate</p>
 
-<h2>Password Reset</h2>
-<form id="reset-form">
-    Yer email: <input type="email" id="email">
-    <button type="submit">Reset Password</button>
-</form>
-<div id="message"></div>
+<ul>
+    <li><a href="/admin-access">Admin Access</a></li>
+    <li><a href="/password-reset-form">Reset Password</a></li>
+    <li><a href="/loot-form">Check Loot</a></li>
+    <li><a href="/admin-command">Admin run OS Command</a></li>
+    <li><a href="/xslt">Transform XML with XSLT</a></li>
+    <li><a href="/change-password">Change Password</a></li>
+</ul>
 
-<h2>Captain Access</h2>
-<p id="admin-message"></p>
-
-<h2>Loot</h2>
-Gimme the loot, gimme the loot! <br/><br/>
-
-<form id="loot-form">
-    Enter loot ID: <input type="text" id="loot-id">
-    <button type="submit">Check Loot</button>
-</form>
-<p id="loot-message"></p>
-
-<h2>Execute Command</h2>
-<form id="cmd-form">
-    Enter command: <input type="text" id="cmd-input">
-    Session ID: <input type="text" id="cmd-sessionId">
-    <button type="submit">Execute</button>
-</form>
-<p id="cmd-output"></p>
-
-<h2>Change Password</h2>
-<form id="change-password-form">
-    New Password: <input type="password" id="new-password">
-    <button type="submit">Change Password</button>
-</form>
-<p id="change-password-message"></p>
-
-<h2>Transform XML with XSLT</h2>
-<form id="xslt-form">
-    Upload XSLT file: <input type="file" id="xslt-file" accept=".xslt, .xsl">
-    <button type="submit">Transform XML</button>
-</form>
-<p id="transformed-xml"></p>
-
-<script>
-document.getElementById('reset-form').onsubmit = async function(event) {
-    event.preventDefault();
-    const email = document.getElementById('email').value;
-    const response = await fetch('/reset-password', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email: email })
-    });
-    const data = await response.text();
-    document.getElementById('message').innerText = data;
-};
-
-async function loadAdminMessage() {
-    const response = await fetch('/admin');
-    const message = await response.text();
-    document.getElementById('admin-message').innerText = message;
-}
-
-loadAdminMessage();
-
-document.getElementById('loot-form').onsubmit = async function(event) {
-    event.preventDefault();
-    const lootId = document.getElementById('loot-id').value;
-    const response = await fetch(`/loot?id=${lootId}`);
-    const data = await response.text();
-    document.getElementById('loot-message').innerText = data;
-};
-
-document.getElementById('cmd-form').onsubmit = async function(event) {
-    event.preventDefault();
-    const command = document.getElementById('cmd-input').value;
-    const sessionId = document.getElementById('cmd-sessionId').value;
-    console.log("Session ID:", sessionId); // Print the session ID value
-    const response = await fetch(`/admin-cmd?sessionId=${sessionId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ command: command })
-    });
-    const data = await response.text();
-    document.getElementById('cmd-output').innerText = data;
-};
-
-document.getElementById('change-password-form').onsubmit = async function(event) {
-    event.preventDefault();
-    const newPassword = document.getElementById('new-password').value;
-    const response = await fetch(`/change-password?sessionId=12345`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ new_password: newPassword })
-    });
-    const data = await response.text();
-    document.getElementById('change-password-message').innerText = data;
-};
-
-document.getElementById('xslt-form').onsubmit = async function(event) {
-    event.preventDefault();
-    const xsltFile = document.getElementById('xslt-file').files[0];
-    
-    if (!xsltFile) {
-        alert('Please select an XSLT file.');
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('xslt_file', xsltFile);
-
-    const response = await fetch('/parse-xslt', {
-        method: 'POST',
-        body: formData
-    });
-
-    if (response.ok) {
-        const xmlData = await response.text();
-        document.getElementById('transformed-xml').innerText = xmlData;
-    } else {
-        alert('Error transforming XML.');
-    }
-};
-</script>
 </body>
 </html>
