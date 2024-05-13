@@ -40,19 +40,15 @@ def change_password_template():
 @app.route('/pirates', defaults={'filename': ''})
 @app.route('/pirates/<path:filename>')
 def serve_files(filename):
-    # Check if filename is not provided, show directory contents
+    # If filename is not provided, show the directory listing
     if not filename:
         try:
-            # List directory contents
             files = os.listdir(files_dir)
             return jsonify(files)
         except OSError as e:
-            # Handle error if directory is not found or other OS errors
             return jsonify({"error": str(e)}), 404
     else:
-        # Serve the file from directory
         try:
-            # Ensure the filename is safe to use
             safe_filename = safe_join(files_dir, filename)
             if not os.path.isfile(safe_filename):
                 return jsonify({"error": "File not found"}), 404
@@ -62,9 +58,8 @@ def serve_files(filename):
 
 @app.route('/reset-password', methods=['POST'])
 def reset_password():
-    # Simulating a password reset by email (vulnerable to host header attack)
     host_header = request.headers['Host']
-    reset_link = f'http://{host_header}/reset-confirm'
+    reset_link = f'http://{host_header}/reset-confirm?token=131rasdadsagfafvsbvafdasd'
     return f'Password reset link (check your email!): {reset_link}'
 
 @app.route('/reset-confirm')
@@ -73,16 +68,13 @@ def reset_confirm():
 
 @app.route('/loot')
 def loot():
-    # Get the 'id' query parameter from the request
     loot_id = request.args.get('id')
 
-    # Hardcoded loot IDs with pirate language responses
     loot_ids = {
         '123456789': 'Ye got not loot',
         '1adsasgvagdad31asdart1235112412515113123123': 'Ye be rich!'
     }
 
-    # Check if the loot_id exists in the loot_ids dictionary
     if loot_id in loot_ids:
         return loot_ids[loot_id]
     else:
@@ -90,7 +82,6 @@ def loot():
 
 @app.route('/admin')
 def admin():
-    # Check if sessionId is provided in the query parameters
     session_id = request.args.get('sessionId')
     if session_id == '12345':
         return 'Arrrr welcome aboard, Cap'
@@ -99,18 +90,15 @@ def admin():
 
 @app.route('/admin-cmd', methods=['POST'])
 def admin_cmd():
-    # Check if sessionId is provided in the query parameters
     session_id = request.args.get('sessionId')
     
-    # Check if the session ID is valid
+    #  Simulated login
     if session_id == '12345':
-        # Get the command from the request data
         data = request.json
         command = data.get('command')
         print(f"Executing command: {command}")
 
         try:
-            # Execute the command
             result = subprocess.check_output(command, shell=True)
             if result is not None:
                 return result.decode('utf-8')
@@ -125,10 +113,9 @@ def admin_cmd():
     
 @app.route('/change-password', methods=['POST'])
 def change_password():
-    # Check if sessionId is provided in the query parameters
     session_id = request.args.get('sessionId')
     
-    # Check if the session ID is valid
+    # Simulated login
     if session_id == '12345':
         # Get the new password from the request data
         new_password = request.form.get('new_password')
@@ -150,10 +137,7 @@ def parse_xslt():
         if 'xslt_file' not in request.files:
             return 'No file part', 400
         
-        # Get the file part from the request
         xslt_file = request.files['xslt_file']
-
-        # Read the file content
         xslt_content = xslt_file.read()
 
         # Create a Saxon processor
