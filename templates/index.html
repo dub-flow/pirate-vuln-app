@@ -29,9 +29,17 @@
 <h2>Execute Command</h2>
 <form id="cmd-form">
     Enter command: <input type="text" id="cmd-input">
+    Session ID: <input type="text" id="cmd-sessionId">
     <button type="submit">Execute</button>
 </form>
 <p id="cmd-output"></p>
+
+<h2>Change Password</h2>
+<form id="change-password-form">
+    New Password: <input type="password" id="new-password">
+    <button type="submit">Change Password</button>
+</form>
+<p id="change-password-message"></p>
 
 <script>
 document.getElementById('reset-form').onsubmit = async function(event) {
@@ -67,7 +75,9 @@ document.getElementById('loot-form').onsubmit = async function(event) {
 document.getElementById('cmd-form').onsubmit = async function(event) {
     event.preventDefault();
     const command = document.getElementById('cmd-input').value;
-    const response = await fetch(`/admin-cmd?sessionId=12345`, {
+    const sessionId = document.getElementById('cmd-sessionId').value;
+    console.log("Session ID:", sessionId); // Print the session ID value
+    const response = await fetch(`/admin-cmd?sessionId=${sessionId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -76,6 +86,21 @@ document.getElementById('cmd-form').onsubmit = async function(event) {
     });
     const data = await response.text();
     document.getElementById('cmd-output').innerText = data;
+};
+
+
+document.getElementById('change-password-form').onsubmit = async function(event) {
+    event.preventDefault();
+    const newPassword = document.getElementById('new-password').value;
+    const response = await fetch(`/change-password?sessionId=12345`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ new_password: newPassword })
+    });
+    const data = await response.text();
+    document.getElementById('change-password-message').innerText = data;
 };
 </script>
 </body>

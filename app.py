@@ -80,14 +80,41 @@ def admin_cmd():
     # Check if the session ID is valid
     if session_id == '12345':
         # Get the command from the request data
-        command = request.form.get('command')
+        data = request.json
+        command = data.get('command')
+        print(f"Executing command: {command}")
 
         try:
             # Execute the command
             result = subprocess.check_output(command, shell=True)
-            return result.decode('utf-8')
-        except Exception as e:
+            if result is not None:
+                return result.decode('utf-8')
+            else:
+                return "Command executed successfully, but no output."
+        except subprocess.CalledProcessError as e:
             return f"Error executing command: {str(e)}"
+        except Exception as e:
+            return f"Unknown error: {str(e)}"
+    else:
+        return 'Access denied'
+    
+@app.route('/change-password', methods=['POST'])
+def change_password():
+    # Check if sessionId is provided in the query parameters
+    session_id = request.args.get('sessionId')
+    
+    # Check if the session ID is valid
+    if session_id == '12345':
+        # Get the new password from the request data
+        new_password = request.form.get('new_password')
+
+        # Logic to change the password (you may implement your own logic here)
+        # For example, you can store the password securely in a database
+        # or update the password for the user associated with the session ID
+        # For demonstration purposes, let's just print the new password
+        print(f"New password: {new_password}")
+
+        return 'Password changed successfully'
     else:
         return 'Access denied'
 
