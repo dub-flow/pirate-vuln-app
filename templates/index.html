@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pirate Files and Reset</title>
+</head>
+<body>
+<h1>Welcome to the Pirate Ship</h1>
+<p>"A smooth sea never made a skilled pirate" - Some Pirate</p>
+
+<h2>Password Reset</h2>
+<form id="reset-form">
+    Yer email: <input type="email" id="email">
+    <button type="submit">Reset Password</button>
+</form>
+<div id="message"></div>
+
+<h2>Captain Access</h2>
+<p id="admin-message"></p>
+
+<h2>Loot</h2>
+<form id="loot-form">
+    Enter loot ID: <input type="text" id="loot-id">
+    <button type="submit">Check Loot</button>
+</form>
+<p id="loot-message"></p>
+
+<h2>Execute Command</h2>
+<form id="cmd-form">
+    Enter command: <input type="text" id="cmd-input">
+    <button type="submit">Execute</button>
+</form>
+<p id="cmd-output"></p>
+
+<script>
+document.getElementById('reset-form').onsubmit = async function(event) {
+    event.preventDefault();
+    const email = document.getElementById('email').value;
+    const response = await fetch('/reset-password', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+    });
+    const data = await response.text();
+    document.getElementById('message').innerText = data;
+};
+
+async function loadAdminMessage() {
+    const response = await fetch('/admin');
+    const message = await response.text();
+    document.getElementById('admin-message').innerText = message;
+}
+
+loadAdminMessage();
+
+document.getElementById('loot-form').onsubmit = async function(event) {
+    event.preventDefault();
+    const lootId = document.getElementById('loot-id').value;
+    const response = await fetch(`/loot?id=${lootId}`);
+    const data = await response.text();
+    document.getElementById('loot-message').innerText = data;
+};
+
+document.getElementById('cmd-form').onsubmit = async function(event) {
+    event.preventDefault();
+    const command = document.getElementById('cmd-input').value;
+    const response = await fetch(`/admin-cmd?sessionId=12345`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ command: command })
+    });
+    const data = await response.text();
+    document.getElementById('cmd-output').innerText = data;
+};
+</script>
+</body>
+</html>
