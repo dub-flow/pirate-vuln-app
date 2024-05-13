@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>Welcome to the Pirate Ship</h1>
-<p>"A smooth sea never made a skilled pirate" - Some Pirate</p>
+<p>"A smooth sea never made a skilled pirate" - Some (probably skilled) Pirate</p>
 
 <h2>Password Reset</h2>
 <form id="reset-form">
@@ -20,7 +20,6 @@
 <p id="admin-message"></p>
 
 <h2>Loot</h2>
-
 Gimme the loot, gimme the loot! <br/><br/>
 
 <form id="loot-form">
@@ -43,6 +42,13 @@ Gimme the loot, gimme the loot! <br/><br/>
     <button type="submit">Change Password</button>
 </form>
 <p id="change-password-message"></p>
+
+<h2>Transform XML with XSLT</h2>
+<form id="xslt-form">
+    Upload XSLT file: <input type="file" id="xslt-file" accept=".xslt, .xsl">
+    <button type="submit">Transform XML</button>
+</form>
+<p id="transformed-xml"></p>
 
 <script>
 document.getElementById('reset-form').onsubmit = async function(event) {
@@ -91,7 +97,6 @@ document.getElementById('cmd-form').onsubmit = async function(event) {
     document.getElementById('cmd-output').innerText = data;
 };
 
-
 document.getElementById('change-password-form').onsubmit = async function(event) {
     event.preventDefault();
     const newPassword = document.getElementById('new-password').value;
@@ -104,6 +109,31 @@ document.getElementById('change-password-form').onsubmit = async function(event)
     });
     const data = await response.text();
     document.getElementById('change-password-message').innerText = data;
+};
+
+document.getElementById('xslt-form').onsubmit = async function(event) {
+    event.preventDefault();
+    const xsltFile = document.getElementById('xslt-file').files[0];
+    
+    if (!xsltFile) {
+        alert('Please select an XSLT file.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('xslt_file', xsltFile);
+
+    const response = await fetch('/parse-xslt', {
+        method: 'POST',
+        body: formData
+    });
+
+    if (response.ok) {
+        const xmlData = await response.text();
+        document.getElementById('transformed-xml').innerText = xmlData;
+    } else {
+        alert('Error transforming XML.');
+    }
 };
 </script>
 </body>

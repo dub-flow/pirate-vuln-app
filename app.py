@@ -2,6 +2,8 @@ from flask import Flask, request, send_from_directory, jsonify, render_template
 from werkzeug.utils import safe_join
 import os
 import subprocess
+from lxml import etree
+from saxonche import PySaxonProcessor
 
 app = Flask(__name__)
 
@@ -118,5 +120,43 @@ def change_password():
     else:
         return 'Access denied'
 
+@app.route('/parse-xslt', methods=['POST'])
+def parse_xslt():
+    try:
+        # Check if the request contains a file part
+        if 'xslt_file' not in request.files:
+            return 'No file part', 400
+        
+        # Get the file part from the request
+        xslt_file = request.files['xslt_file']
+
+        # Read the file content
+        xslt_content = xslt_file.read()
+
+        # Create a Saxon processor
+        with PySaxonProcessor(license=False) as proc:
+            # Parse the XSLT content
+            xsltproc = proc.new_xslt30_processor()
+            xsltproc.set_cwd('.')
+            transformer = xsltproc.compile_stylesheet(stylesheet_text=xslt_content.decode())
+
+            # Read the XML file to apply the XSLT transformation
+            with open('./resources/some.xml', 'rb') as xml_file:
+                xml_content = xml_file.read()
+
+            # Parse the XML content
+            document = proc.parse_xml(xml_text=xml_content.decode('utf-8'))
+
+            # Apply the XSLT transformation to the XML
+            output = transformer.transform_to_string(xdm_node=document)
+
+            if not output:
+                return "Successful but no output"
+
+            return output
+    except Exception as e:
+        print(f"Error processing XSLT: {str(e)}")
+        return str(e), 500
+    
 if __name__ == '__main__':
     app.run(debug=True, host='127.0.0.1')

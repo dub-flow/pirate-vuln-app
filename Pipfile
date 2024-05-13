@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 flask = "*"
+lxml = "*"
+saxonche = "*"
 
 [dev-packages]
 
