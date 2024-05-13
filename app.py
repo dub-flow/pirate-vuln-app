@@ -2,7 +2,6 @@ from flask import Flask, request, send_from_directory, jsonify, render_template
 from werkzeug.utils import safe_join
 import os
 import subprocess
-from lxml import etree
 from saxonche import PySaxonProcessor
 
 app = Flask(__name__)
