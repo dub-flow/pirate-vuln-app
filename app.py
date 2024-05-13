@@ -113,21 +113,16 @@ def admin_cmd():
 @app.route('/change-password', methods=['POST'])
 def change_password():
     session_id = request.args.get('sessionId')
+    data = request.json
+    new_password = data.get('new_password')
     
-    # Simulated login
-    if session_id == '12345':
-        # Get the new password from the request data
-        new_password = request.form.get('new_password')
+    sessions = {
+        '12345': f'Ye password has been changed to \'{new_password}\', matey!',
+        'default': 'SessionId doesn\'t exist. Walk the plank, scallywag!'
+    }
 
-        # Logic to change the password (you may implement your own logic here)
-        # For example, you can store the password securely in a database
-        # or update the password for the user associated with the session ID
-        # For demonstration purposes, let's just print the new password
-        print(f"New password: {new_password}")
+    return sessions.get(session_id, sessions['default'])
 
-        return 'Password changed successfully'
-    else:
-        return 'Access denied'
 
 @app.route('/parse-xslt', methods=['POST'])
 def parse_xslt():
