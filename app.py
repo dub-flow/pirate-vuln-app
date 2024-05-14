@@ -8,6 +8,10 @@ app = Flask(__name__, static_url_path='/static', static_folder='static')
 
 files_dir = './pirates'
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -160,5 +164,10 @@ def parse_xslt():
         return str(e), 500
     
 if __name__ == '__main__':
-    # NOTE: The 'host=0.0.0.0' is required for the app to run inside docker (which is the recommended way to run the app)
-    app.run(debug=True, host='0.0.0.0') 
+    # Check if running in Docker
+    if os.getenv('DOCKER_ENVIRONMENT') == 'true':
+        # If running in Docker, listen on all interfaces
+        app.run(debug=True, host='0.0.0.0')
+    else:
+        # If not running in Docker, listen on localhost
+        app.run(debug=True, host='127.0.0.1')
