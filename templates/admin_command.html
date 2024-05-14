@@ -13,7 +13,6 @@
         <button type="submit">Execute</button>
     </form>
     <p id="admin-cmd-output"></p>
-
     <script>
         document.getElementById('admin-command-form').onsubmit = async function(event) {
             event.preventDefault();
@@ -31,5 +30,9 @@
             document.getElementById('admin-cmd-output').innerText = data;
         };
     </script>
+
+    <br/><br/>
+
+    <img src="{{ url_for('static', filename='captain2.png') }}" style="width: 20%; height: auto;">
 </body>
 </html>

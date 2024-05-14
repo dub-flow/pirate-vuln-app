@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loot Form</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loot Form</title>
 </head>
 <body>
-<h2>Loot</h2>
-<form id="loot-form">
-    Enter loot ID: <input type="text" id="loot-id">
-    <button type="submit">Check Loot</button>
-</form>
-<p id="loot-message"></p>
+    <h2>Loot</h2>
+    <form id="loot-form">
+        Enter loot ID: <input type="text" id="loot-id">
+        <button type="submit">Check Loot</button>
+    </form>
+    <p id="loot-message"></p>
 
-<script>
-document.getElementById('loot-form').onsubmit = async function(event) {
-    event.preventDefault();
-    const lootId = document.getElementById('loot-id').value;
-    const response = await fetch(`/loot?id=${lootId}`);
-    const data = await response.text();
-    document.getElementById('loot-message').innerText = data;
-};
-</script>
+    <script>
+        document.getElementById('loot-form').onsubmit = async function(event) {
+            event.preventDefault();
+            const lootId = document.getElementById('loot-id').value;
+            const response = await fetch(`/loot?id=${lootId}`);
+            const data = await response.text();
+            document.getElementById('loot-message').innerText = data;
+        };
+    </script>
+    
+    <br/><br/>
+
+    <img src="{{ url_for('static', filename='loot.png') }}" style="width: 30%; height: auto;">
 </body>
 </html>
