@@ -160,4 +160,5 @@ def parse_xslt():
         return str(e), 500
     
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1')
+    # NOTE: The 'host=0.0.0.0' is required for the app to run inside docker (which is the recommended way to run the app)
+    app.run(debug=True, host='0.0.0.0') 
