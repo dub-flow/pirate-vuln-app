@@ -36,7 +36,7 @@ def password_reset_form_template():
 def admin_access_template():
     return render_template('admin_access.html')
 
-@app.route('/change-password')
+@app.route('/change-password-form')
 def change_password_template():
     return render_template('change_password.html')
 
@@ -114,19 +114,18 @@ def admin_cmd():
     else:
         return 'Access denied'
     
+
 @app.route('/change-password', methods=['POST'])
 def change_password():
-    session_id = request.args.get('sessionId')
     data = request.json
+    email = data.get('email')
     new_password = data.get('new_password')
     
-    sessions = {
-        '12345': f'Ye password has been changed to \'{new_password}\', matey!',
-        'default': 'SessionId doesn\'t exist. Walk the plank, scallywag!'
-    }
-
-    return sessions.get(session_id, sessions['default'])
-
+    # Check if the email is admin@pirate-bay.com
+    if email == 'admin@pirate-bay.com':
+        return f'Ye password has been changed to \'{new_password}\', matey!'
+    else:
+        return 'Access denied. Walk the plank, scallywag!'
 
 @app.route('/parse-xslt', methods=['POST'])
 def parse_xslt():
