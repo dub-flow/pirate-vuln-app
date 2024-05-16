@@ -51,7 +51,7 @@ Content-Length: 25
 * Use the `Transform XML with XSLT` functionality
 * Upload a file and take the `./resources/injection-read-file.xslt`, and observe that the `/etc/passwd` file was returned
 
-# Vulnerability 6: BAC in Change Password
+### Vulnerability 6: BAC in Change Password
 
 * Realize that you can change another user's password if you provide their email address
 * This means you can change any users' password
