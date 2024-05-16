@@ -20,7 +20,7 @@ This app is intentionally vulnerable!
 
 ### Vulnerability 1: Exposed Files
 
-* We run `gobuster dir -u http://localhost -w ./wordlists/1.txt` 
+* We run `gobuster dir -u http://localhost -w ./resources/wordlist.txt` 
 * Looking at the output, we find `/pirates` exposed
 * We visit `http://localhost/pirates` and find `http://localhost/pirates/treasure.txt`
 
